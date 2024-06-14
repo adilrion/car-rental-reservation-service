@@ -36,9 +36,7 @@ router.post(
 router.patch(
   '/change-password',
   adminAuthorizationMiddleware(
-    EnumUserRole.SUPER_ADMIN,
     EnumUserRole.ADMIN,
-    EnumUserRole.MODERATOR,
   ),
   zodValidationHandler(authValidation.changePasswordValidation),
   authController.changePassword,
