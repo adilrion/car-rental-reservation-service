@@ -63,14 +63,13 @@ const getBookingByUserId: RequestHandler = TryCatchHandler(async (req, res) => {
 
 
 // controller for update booking
-const updateBooking: RequestHandler = TryCatchHandler(async (req, res) => {
-  const id = req.params.id
+const calculateCarReturn: RequestHandler = TryCatchHandler(async (req, res) => {
   const data = req.body
-  const result = await bookingService.updateBooking(id, data)
+  const result = await bookingService.calculateBookingFee(data)
   ApiResponse<IBooking>(res, {
     statusCode: 200,
     success: true,
-    message: 'Booking Updated Successfully',
+    message: 'Car returned successfully',
     data: result,
   })
 })
@@ -94,7 +93,7 @@ export const bookingController = {
   createNewBooking,
   getAllBookings,
   getSingleBooking,
-  updateBooking,
+  calculateCarReturn,
   deleteBooking,
-  getBookingByUserId
+  getBookingByUserId,
 }

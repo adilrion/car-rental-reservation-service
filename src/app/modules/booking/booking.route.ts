@@ -18,4 +18,5 @@ router.get("/", AuthorizationPermission(ERole.ADMIN), bookingController.getAllBo
 router.get("/my-bookings", AuthorizationPermission(ERole.USER), bookingController.getBookingByUserId)
 
 
+
 export const bookingRouter = router

@@ -1,83 +1,84 @@
-import httpStatus from "http-status"
-import ApiError from "../../../Errors/apiError"
-import { IBooking } from "./booking.interface"
-import { BookingModel } from "./booking.model"
-
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import httpStatus from 'http-status'
+import ApiError from '../../../Errors/apiError'
+import { IBooking } from './booking.interface'
+import { BookingModel } from './booking.model'
+import { calculateTotalCost } from './booking.util'
 
 // service for booking a car
 const bookCar = async (booking: IBooking): Promise<IBooking | null> => {
-  const result = await (await BookingModel.create(booking))
+  const result = await await BookingModel.create(booking)
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Failed to create booking!')
   }
 
- const newBooking = await BookingModel.findById(result._id)
-  .populate({
-    path: 'car',
-    select: '-__v -id'
-  })
-  .populate({
-    path: 'user',
-    select: '-__v -createdAt -updatedAt -id'
-  });
+  const newBooking = await BookingModel.findById(result._id)
+    .populate({
+      path: 'car',
+      select: '-__v -id',
+    })
+    .populate({
+      path: 'user',
+      select: '-__v -createdAt -updatedAt -id',
+    })
   return newBooking
 }
 
 // service for get all bookings
 const getAllBookings = async (params: {
-  carId?: string, date?: string
+  carId?: string
+  date?: string
 }): Promise<IBooking[]> => {
+  const { carId, date } = params
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const query: any = {}
 
-  const { carId, date } = params;
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   const query: any = {};
-
-    if (carId) {
-      query.car = carId;
-  }
-  
-   if (date) {
-      const parsedDate = new Date(date as string);
-
-      const startOfDay = new Date(parsedDate.setHours(0, 0, 0, 0)).toISOString();
-      const endOfDay = new Date(parsedDate.setHours(23, 59, 59, 999)).toISOString();
-
-      query.date = {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      };
+  if (carId) {
+    query.car = carId
   }
 
- const bookings = await BookingModel.find(query)
-      .populate({
-        path: 'car',
-        select: '-__v',
-      })
-      .populate({
-        path: 'user',
-        select: '-__v -createdAt -updatedAt',
-      });
-  
-  
+  if (date) {
+    const parsedDate = new Date(date as string)
+
+    const startOfDay = new Date(parsedDate.setHours(0, 0, 0, 0)).toISOString()
+    const endOfDay = new Date(
+      parsedDate.setHours(23, 59, 59, 999),
+    ).toISOString()
+
+    query.date = {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    }
+  }
+
+  const bookings = await BookingModel.find(query)
+    .populate({
+      path: 'car',
+      select: '-__v',
+    })
+    .populate({
+      path: 'user',
+      select: '-__v -createdAt -updatedAt',
+    })
+
   if (!bookings) throw new ApiError(httpStatus.NOT_FOUND, 'bookings not found')
-  if(bookings.length === 0) throw new ApiError(httpStatus.NOT_FOUND, 'No bookings found')
+  if (bookings.length === 0)
+    throw new ApiError(httpStatus.NOT_FOUND, 'No bookings found')
   return bookings
 }
-
 
 // get booking by user id
 const getBookingByUserId = async (userId: string): Promise<IBooking[]> => {
   const bookings = await BookingModel.find({ user: userId })
     .populate({
       path: 'car',
-      select: '-__v -id'
+      select: '-__v -id',
     })
     .populate({
       path: 'user',
-      select: '-__v -createdAt -updatedAt -id'
-    });
+      select: '-__v -createdAt -updatedAt -id',
+    })
   return bookings
-
 }
 
 // service for get single booking
@@ -88,16 +89,43 @@ const getSingleBooking = async (id: string): Promise<IBooking | null> => {
 }
 
 // service for update booking
-const updateBooking = async (id: string, data: IBooking): Promise<IBooking | null> => {
-  const isDataExist = await BookingModel.findById(id)
+const calculateBookingFee = async (data: {
+  bookingId: string
+  endTime: string
+}): Promise<IBooking | null> => {
+  const isDataExist = await BookingModel.findById(data.bookingId)
+    .populate({
+      path: 'car',
+      select: 'pricePerHour',
+    })
+    .exec()
   if (!isDataExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Booking not found')
   }
+
+  const { startTime, car } = isDataExist
+
+  const totalCost: number = calculateTotalCost(
+    startTime,
+    data.endTime,
+    //@ts-ignore
+    car.pricePerHour,
+  )
+
   const response = await BookingModel.findByIdAndUpdate(
-    { _id: id },
-    { ...data },
+    { _id: data.bookingId },
+    { endTime: data.endTime, totalCost: Number(totalCost) },
     { new: true },
   )
+    .populate({
+      path: 'car',
+      select: '-__v -id',
+    })
+    .populate({
+      path: 'user',
+      select: '-__v -createdAt -updatedAt -id',
+    })
+
   return response
 }
 
@@ -111,12 +139,13 @@ const deleteBooking = async (id: string): Promise<IBooking | null> => {
   return response
 }
 
-
 // export booking service
 export const bookingService = {
   bookCar,
   getAllBookings,
   getSingleBooking,
-  updateBooking,
-  deleteBooking,getBookingByUserId
+  calculateBookingFee,
+  deleteBooking,
+  getBookingByUserId,
 }
+  
