@@ -31,7 +31,7 @@ const globalErrorHandler: ErrorRequestHandler = (
     errorMessage = responseError.errorMessage
   } else if (error.code === 11000) {
        statusCode = 409 // Conflict status code
-       message = 'Duplicate field value entered'
+       message = error.message 
        errorMessage = [{ path: '', message: error.message }]
 
   } else if (error instanceof ZodError) {
