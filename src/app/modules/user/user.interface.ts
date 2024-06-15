@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { Model } from 'mongoose';
-import { IPaginationOptions } from '../../../interfaces/IPaginationAndFiltering';
 
 
 
@@ -41,8 +40,4 @@ export interface IUserMethod extends Model<IUser> {
   ): Promise<boolean>
 }
 
-// Define the response format for user data
-export interface IUserResponse {
-  meta: IPaginationOptions
-  data: IUser[]
-}
+

@@ -2,7 +2,7 @@
 
 import httpStatus from 'http-status'
 import ApiError from '../../../Errors/apiError'
-import {  IUser, IUserResponse } from './user.interface'
+import {  IUser } from './user.interface'
 import { UserModel } from './user.model'
 
 // Create a new user to maintain databases
@@ -19,18 +19,6 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
 
 
 
-// get all user form the database
-const getAllUsers = async (): Promise<IUserResponse> => {
-  const users = await UserModel.find()
-  if (!users) throw new ApiError(httpStatus.NOT_FOUND, 'users not found')
-  const userCount = await UserModel.countDocuments()
-  return {
-    meta: {
-      documentCount: userCount,
-    },
-    data: users,
-  }
-}
 
 // get single user from the database
 const getSingleUser = async (id: string): Promise<IUser | null> => {
@@ -78,7 +66,6 @@ const deleteUser = async (id: string): Promise<IUser | null> => {
 
 export const UserService = {
   createUser,
-  getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,

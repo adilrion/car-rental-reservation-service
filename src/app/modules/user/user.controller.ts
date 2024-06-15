@@ -21,17 +21,7 @@ const createNewUser: RequestHandler = TryCatchHandler(async (req, res) => {
 
 
 
-// user controller to get all users from the database
-const getAllUsers: RequestHandler = TryCatchHandler(async (req, res) => {
-  const result = await UserService.getAllUsers()
-  ApiResponse<IUser[]>(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Users retrieved Successfully',
-    meta: result.meta,
-    data: result.data,
-  })
-})
+
 
 // get single user controller
 const getSingleUser: RequestHandler = TryCatchHandler(async (req, res) => {
@@ -73,7 +63,6 @@ const deleteUser: RequestHandler = TryCatchHandler(async (req, res) => {
 
 export const userController = {
   createNewUser,
-  getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,

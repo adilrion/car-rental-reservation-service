@@ -21,14 +21,7 @@ route.post(
 )
 
 
-// get all users routes
-route.get(
-  '/',
-  AuthorizationPermission(
-    ERole.ADMIN,
-  ),
-  userController.getAllUsers,
-)
+
 
 // get single user routes
 route.get(
