@@ -30,8 +30,11 @@ const userSchema = new Schema<IUser, IUserMethod>(
       type: String,
       enum: ['user', 'admin'],
       default: 'user',
+    },
+    address: {
+      type: String,
+      required: true,
     }
-    
   },
   {
     timestamps: true,

@@ -50,4 +50,4 @@ carSchema.pre<Query<ICar, Document & ICar>>(/^find/, function(next) {
 
 
 
-export const CarModel = mongoose.model<ICar>('Car', carSchema)
+export const CarModel = mongoose.model<ICar>('car', carSchema)
