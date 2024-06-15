@@ -1,9 +1,9 @@
 import express from 'express'
-import { EnumUserRole } from '../../../enums/EnumUser'
-import adminAuthorizationMiddleware from '../../middleware/authorizationService'
+import { ERole } from '../../../enums/EnumUser'
+import AuthorizationPermission from '../../middleware/authorizationService'
 import { zodValidationHandler } from '../../middleware/zodValidationHandler'
-import { authValidation } from './user.auth.validation'
 import { authController } from './user.auth.controller'
+import { authValidation } from './user.auth.validation'
 
 const router = express.Router()
 
@@ -35,8 +35,8 @@ router.post(
 
 router.patch(
   '/change-password',
-  adminAuthorizationMiddleware(
-    EnumUserRole.ADMIN,
+  AuthorizationPermission(
+    ERole.ADMIN,
   ),
   zodValidationHandler(authValidation.changePasswordValidation),
   authController.changePassword,

@@ -30,17 +30,17 @@ const loginService = async (payload: ILogin): Promise<ILoginResponse> => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password incorrect!')
   }
 
-  const { name, email: userEmail, _id } = isUserExist
+  const { name, email: userEmail, _id, role } = isUserExist
 
   const accessToken = await jwtHelper.createToken(
-    { userEmail, name, _id },
+    { userEmail, name, _id, role },
     config.jwt.secret as Secret,
     config.jwt.expiresIn as string,
   )
 
   const refreshToken = await jwtHelper.createToken(
-    { userEmail, name, _id },
-    config.jwt.refreshSecret as Secret,
+    { userEmail, name, _id, role },
+    config.jwt.refreshSecret as Secret, 
     config.jwt.refreshExpiresIn as string,
   )
 
@@ -68,10 +68,10 @@ const refreshTokenGenerator = async (
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist!')
   }
 
-  const { email: userEmail, name, _id } = user
+  const { email: userEmail, name, _id, role } = user
 
   const newAccessToken = jwtHelper.createToken(
-    { userEmail, name, _id },
+    { userEmail, name, _id, role },
     config.jwt.secret as Secret,
     config.jwt.expiresIn as string,
   )

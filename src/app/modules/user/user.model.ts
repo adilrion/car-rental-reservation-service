@@ -26,6 +26,11 @@ const userSchema = new Schema<IUser, IUserMethod>(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    }
     
   },
   {
@@ -55,7 +60,7 @@ userSchema.statics.isUserExist = async function (
 ): Promise<Partial<IUserMethodResponse> | null> {
   return await UserModel.findOne(
     { email: email },
-    { email: 1, name: 1, _id: 1, profile_img: 1 },
+    { email: 1, name: 1, _id: 1, role: 1 },
   )
 }
 

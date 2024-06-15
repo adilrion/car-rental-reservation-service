@@ -1,7 +1,9 @@
 // user route
 import express from 'express'
 
-import adminAuthorizationMiddleware from '../../middleware/authorizationService'
+import { ERole } from '../../../enums/EnumUser'
+import AuthorizationPermission from '../../middleware/authorizationService'
+import userAuthorizationMiddleware from '../../middleware/userAuthorization'
 import { zodValidationHandler } from '../../middleware/zodValidationHandler'
 import { idRequestValidation } from '../../zodValidation/idRequestValidation'
 import { userController } from './user.controller'
@@ -9,8 +11,6 @@ import {
   UserUpdateValidationSchema,
   UserValidationSchema,
 } from './user.validation'
-import { EnumUserRole } from '../../../enums/EnumUser'
-import userAuthorizationMiddleware from '../../middleware/userAuthorization'
 
 const route = express.Router()
 
@@ -25,8 +25,8 @@ route.post(
 // get all users routes
 route.get(
   '/',
-  adminAuthorizationMiddleware(
-    EnumUserRole.ADMIN,
+  AuthorizationPermission(
+    ERole.ADMIN,
   ),
   userController.getAllUsers,
 )
@@ -51,8 +51,8 @@ route.patch(
 // delete user routes
 route.delete(
   '/delete-user/:id',
-  adminAuthorizationMiddleware(
-    EnumUserRole.ADMIN,
+  AuthorizationPermission(
+    ERole.ADMIN,
   ),
   zodValidationHandler(idRequestValidation),
   userController.deleteUser,

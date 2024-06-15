@@ -5,7 +5,7 @@ import ApiError from '../../Errors/apiError'
 import config from '../../config'
 import { jwtHelper } from '../../helpers/jwtHelper'
 
-const adminAuthorizationMiddleware =
+const AuthorizationPermission =
   (...requiredRoles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -14,10 +14,13 @@ const adminAuthorizationMiddleware =
         (req.headers.Authorization as string)
       if (!token)
         throw new ApiError(httpStatus.UNAUTHORIZED, 'You Are not Authorized!')
+
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      const [bearer, tokenValue] = token.split(' ')
       let verifiedUser
       // eslint-disable-next-line prefer-const
       verifiedUser = await jwtHelper.verifyToken(
-        token,
+        tokenValue,
         config.jwt.secret as Secret,
       )
 
@@ -36,4 +39,4 @@ const adminAuthorizationMiddleware =
     }
   }
 
-export default adminAuthorizationMiddleware
+export default AuthorizationPermission
