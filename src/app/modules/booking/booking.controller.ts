@@ -28,9 +28,10 @@ const getAllBookings: RequestHandler = TryCatchHandler(async (req, res) => {
  
   const result = await bookingService.getAllBookings(req.query)
   ApiResponse<IBooking[]>(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Bookings retrieved Successfully',
+    statusCode: result.length === 0 ? 404 : 200,
+    success: result.length === 0 ? false : true,
+    message:
+      result.length === 0 ? 'No Data Found' : 'Bookings retrieved Successfully',
     data: result,
   })
 })

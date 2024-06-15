@@ -6,12 +6,12 @@ export const ApiNotFoundError = (req: Request, res: Response) => {
   ApiResponse(res, {
     statusCode: httpStatus.NOT_FOUND,
     success: false,
-    message: 'API Not Found',
-    data: [
-      {
-        path: req.originalUrl,
-        message: 'API Not Found',
-      },
-    ],
+    message: 'Not Found',
+    // data: [
+    //   {
+    //     path: req.originalUrl,
+    //     message: 'Not Found',
+    //   },
+    // ],
   })
 }

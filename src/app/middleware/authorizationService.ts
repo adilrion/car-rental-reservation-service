@@ -13,7 +13,10 @@ const AuthorizationPermission =
         (req.headers.authorization as string) ||
         (req.headers.Authorization as string)
       if (!token)
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'You Are not Authorized!')
+        throw new ApiError(
+          httpStatus.NOT_FOUND,
+          'You have no access to this route',
+        )
 
       // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
       const [bearer, tokenValue] = token.split(' ')
@@ -25,13 +28,19 @@ const AuthorizationPermission =
       )
 
       if (!verifiedUser) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'You are not verified!')
+        throw new ApiError(
+          httpStatus.NOT_FOUND,
+          'You have no access to this route',
+        )
       }
 
       req.user = verifiedUser
 
       if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'You are unauthorized!')
+        throw new ApiError(
+          httpStatus.NOT_FOUND,
+          'You have no access to this route',
+        )
       }
       next()
     } catch (error) {

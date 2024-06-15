@@ -62,8 +62,6 @@ const getAllBookings = async (params: {
     })
 
   if (!bookings) throw new ApiError(httpStatus.NOT_FOUND, 'bookings not found')
-  if (bookings.length === 0)
-    throw new ApiError(httpStatus.NOT_FOUND, 'No bookings found')
   return bookings
 }
 
@@ -148,4 +146,3 @@ export const bookingService = {
   deleteBooking,
   getBookingByUserId,
 }
-  

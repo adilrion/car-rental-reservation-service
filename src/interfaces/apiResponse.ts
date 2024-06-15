@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { IPaginationOptions } from "./IPaginationAndFiltering"
 
 export type ApiResponseType<T> = {
@@ -5,6 +6,6 @@ export type ApiResponseType<T> = {
   success: boolean
   message?: string
   meta?: IPaginationOptions
-  data: T | null
+  data?: T | null
   token?: string
 }

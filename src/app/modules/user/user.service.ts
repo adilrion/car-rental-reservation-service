@@ -7,11 +7,7 @@ import { UserModel } from './user.model'
 
 // Create a new user to maintain databases
 const createUser = async (user: IUser): Promise<IUser | null> => {
-  const isUserExist = await UserModel.isUserExist(user.email)
 
-  if (isUserExist) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User Already Exist!')
-  }
 
   const newUser = await UserModel.create(user)
   if (!newUser) {

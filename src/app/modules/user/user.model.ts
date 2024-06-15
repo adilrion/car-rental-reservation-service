@@ -3,7 +3,6 @@ import mongoose, { Schema } from 'mongoose'
 import config from '../../../config'
 import { IUser, IUserMethod, IUserMethodResponse } from './user.interface'
 
-
 // Create the user schema
 const userSchema = new Schema<IUser, IUserMethod>(
   {
@@ -15,6 +14,7 @@ const userSchema = new Schema<IUser, IUserMethod>(
     email: {
       type: String,
       required: true,
+      unique: true,
       lowercase: true,
     },
     password: {
@@ -34,7 +34,7 @@ const userSchema = new Schema<IUser, IUserMethod>(
     address: {
       type: String,
       required: true,
-    }
+    },
   },
   {
     timestamps: true,
@@ -49,13 +49,10 @@ const userSchema = new Schema<IUser, IUserMethod>(
   },
 )
 
-
-userSchema.pre("findOne", async function (next) { 
-  this.select("-password")
+userSchema.pre('findOne', async function (next) {
+  this.select('-password')
   next()
 })
-
-
 
 // Static methods
 userSchema.statics.isUserExist = async function (
@@ -82,10 +79,5 @@ userSchema.pre('save', async function (next) {
 
   next()
 })
-
-
-
-
-
 
 export const UserModel = mongoose.model<IUser, IUserMethod>('user', userSchema)
