@@ -20,9 +20,6 @@ route.post(
   userController.createNewUser,
 )
 
-
-
-
 // get single user routes
 route.get(
   '/:id',
@@ -41,9 +38,7 @@ route.patch(
 // delete user routes
 route.delete(
   '/delete-user/:id',
-  AuthorizationPermission(
-    ERole.ADMIN,
-  ),
+  AuthorizationPermission(ERole.ADMIN),
   zodValidationHandler(idRequestValidation),
   userController.deleteUser,
 )
