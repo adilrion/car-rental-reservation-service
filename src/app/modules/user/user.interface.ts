@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import { Model } from 'mongoose'
-import { IPaginationOptions } from '../../../interfaces/IPaginationAndFiltering'
+import { Model } from 'mongoose';
+import { IPaginationOptions } from '../../../interfaces/IPaginationAndFiltering';
 
 
 

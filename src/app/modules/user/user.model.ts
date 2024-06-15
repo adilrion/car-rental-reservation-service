@@ -20,6 +20,7 @@ const userSchema = new Schema<IUser, IUserMethod>(
     password: {
       type: String,
       required: true,
+      excludeIndexes: true,
     },
     phone: {
       type: String,
@@ -39,13 +40,22 @@ const userSchema = new Schema<IUser, IUserMethod>(
     },
   },
 )
+
+
+userSchema.pre("findOne", async function (next) { 
+  this.select("-password")
+  next()
+})
+
+
+
 // Static methods
 userSchema.statics.isUserExist = async function (
   email: string,
 ): Promise<Partial<IUserMethodResponse> | null> {
   return await UserModel.findOne(
     { email: email },
-    { email: 1, password: 1, name: 1, _id: 1, profile_img: 1 },
+    { email: 1, name: 1, _id: 1, profile_img: 1 },
   )
 }
 
@@ -64,5 +74,10 @@ userSchema.pre('save', async function (next) {
 
   next()
 })
+
+
+
+
+
 
 export const UserModel = mongoose.model<IUser, IUserMethod>('user', userSchema)

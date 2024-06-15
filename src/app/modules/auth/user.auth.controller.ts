@@ -4,8 +4,8 @@ import httpStatus from 'http-status'
 import config from '../../../config'
 import { ApiResponse } from '../../../shared/apiResponse'
 import { TryCatchHandler } from '../../../shared/tryCatchHandler'
+import { IUser } from '../user/user.interface'
 import {
-  ILoginResponse,
   ILogoutResponse,
   IRefreshTokenResponse,
 } from './user.auth.interface'
@@ -14,7 +14,7 @@ import { authService } from './user.auth.service'
 const loginUser: RequestHandler = TryCatchHandler(async (req, res) => {
   const { ...loginUser } = req.body
 
-  const { refreshToken, ...result } = await authService.loginService(loginUser)
+  const { refreshToken, accessToken, ...result } = await authService.loginService(loginUser)
   const isProduction = config.env === 'production'
   const cookieOptions = {
     secure: isProduction,
@@ -26,18 +26,20 @@ const loginUser: RequestHandler = TryCatchHandler(async (req, res) => {
   if (refreshToken) {
     res.cookie('refreshToken', refreshToken, cookieOptions)
   }
-  ApiResponse<ILoginResponse>(res, {
+  
+  ApiResponse<Partial<IUser>>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User logged in successfully!',
+    message: 'User logged in successfully',
     data: result,
+    token: accessToken,
   })
 })
 
 const refreshToken: RequestHandler = TryCatchHandler(async (req, res) => {
   const { refreshToken } = req.cookies
   if (!refreshToken) {
-    ApiResponse<ILoginResponse>(res, {
+    ApiResponse<null>(res, {
       statusCode: httpStatus.UNAUTHORIZED,
       success: false,
       message: 'Unauthorized',

@@ -10,7 +10,7 @@ const allRoutes = [
     route: userRouter,
   },
   {
-    path: '/user-authentication',
+    path: '/auth',
     route: userAuthRouter,
   }
 ]

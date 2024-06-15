@@ -8,8 +8,7 @@ export type ILogin = {
 export type ILoginResponse = {
   accessToken: string
   refreshToken?: string
-  data: IUser
-}
+} & Partial<IUser>
 
 
 export type ILogoutResponse = {

@@ -8,7 +8,7 @@ import { authController } from './user.auth.controller'
 const router = express.Router()
 
 router.post(
-  '/login',
+  '/signin',
   zodValidationHandler(authValidation.loginValidation),
   authController.loginUser,
 )

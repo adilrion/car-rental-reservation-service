@@ -10,5 +10,6 @@ export const ApiResponse = <T>(res: Response, data: ApiResponseType<T>) => {
     message: data?.message || null,
     ...(data?.meta && { meta: data.meta }), 
     data: data?.data || null,
+    ...(data?.token && { token: data.token }),
   });
 };

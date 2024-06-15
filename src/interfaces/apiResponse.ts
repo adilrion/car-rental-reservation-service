@@ -6,4 +6,5 @@ export type ApiResponseType<T> = {
   message?: string
   meta?: IPaginationOptions
   data: T | null
+  token?: string
 }
