@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Query, Schema } from "mongoose";
 import { ICar } from "./car.interface";
 import mongoose from "mongoose";
 
@@ -39,6 +39,14 @@ const carSchema = new Schema<ICar>({
 }, {
   timestamps: true,
 })
+
+
+
+// Add pre middleware to filter out deleted cars using setQuery
+carSchema.pre<Query<ICar, Document & ICar>>(/^find/, function(next) {
+  this.setQuery({ ...this.getQuery(), isDeleted: false });
+  next();
+});
 
 
 

@@ -47,7 +47,7 @@ const deleteCar = async (id: string): Promise<ICar | null> => {
   if (!isDataExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Car not found')
   }
-  const response = await CarModel.findByIdAndDelete(id)
+  const response = await CarModel.findByIdAndUpdate({_id: id}, {isDeleted: true}, {new: true})
   return response
 }
 
