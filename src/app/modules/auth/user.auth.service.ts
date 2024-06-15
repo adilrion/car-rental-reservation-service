@@ -16,7 +16,7 @@ const loginService = async (payload: ILogin): Promise<ILoginResponse> => {
   const isUserExist = await UserModel.findOne({ email: email })
 
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'user Not Found!')
+    throw new ApiError(httpStatus.NOT_FOUND, 'No Data Found')
   }
 
   if (

@@ -25,7 +25,6 @@ const createNewBooking: RequestHandler = TryCatchHandler(async (req, res) => {
 
 // controller for get all bookings
 const getAllBookings: RequestHandler = TryCatchHandler(async (req, res) => {
- 
   const result = await bookingService.getAllBookings(req.query)
   ApiResponse<IBooking[]>(res, {
     statusCode: result.length === 0 ? 404 : 200,
