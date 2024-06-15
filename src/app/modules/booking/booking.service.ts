@@ -38,17 +38,7 @@ const getAllBookings = async (params: {
   }
 
   if (date) {
-    const parsedDate = new Date(date as string)
-
-    const startOfDay = new Date(parsedDate.setHours(0, 0, 0, 0)).toISOString()
-    const endOfDay = new Date(
-      parsedDate.setHours(23, 59, 59, 999),
-    ).toISOString()
-
-    query.date = {
-      $gte: startOfDay,
-      $lte: endOfDay,
-    }
+    query.date = date
   }
 
   const bookings = await BookingModel.find(query)
