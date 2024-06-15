@@ -15,5 +15,7 @@ router.post('/', AuthorizationPermission(ERole.USER), zodValidationHandler(booki
 
 router.get("/", AuthorizationPermission(ERole.ADMIN), bookingController.getAllBookings)
 
+router.get("/my-bookings", AuthorizationPermission(ERole.USER), bookingController.getBookingByUserId)
+
 
 export const bookingRouter = router

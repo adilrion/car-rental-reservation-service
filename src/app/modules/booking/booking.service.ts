@@ -64,6 +64,22 @@ const getAllBookings = async (params: {
   return bookings
 }
 
+
+// get booking by user id
+const getBookingByUserId = async (userId: string): Promise<IBooking[]> => {
+  const bookings = await BookingModel.find({ user: userId })
+    .populate({
+      path: 'car',
+      select: '-__v -id'
+    })
+    .populate({
+      path: 'user',
+      select: '-__v -createdAt -updatedAt -id'
+    });
+  return bookings
+
+}
+
 // service for get single booking
 const getSingleBooking = async (id: string): Promise<IBooking | null> => {
   const booking = await BookingModel.findById(id)
@@ -102,5 +118,5 @@ export const bookingService = {
   getAllBookings,
   getSingleBooking,
   updateBooking,
-  deleteBooking
+  deleteBooking,getBookingByUserId
 }

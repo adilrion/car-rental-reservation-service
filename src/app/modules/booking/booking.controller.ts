@@ -49,6 +49,18 @@ const getSingleBooking: RequestHandler = TryCatchHandler(async (req, res) => {
 })
 
 
+// controller for get booking by user id 
+const getBookingByUserId: RequestHandler = TryCatchHandler(async (req, res) => {
+  const userId = req.user._id
+  const result = await bookingService.getBookingByUserId(userId)
+  ApiResponse<IBooking[]>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Bookings retrieved Successfully',
+    data: result,
+  })
+})
+
 
 // controller for update booking
 const updateBooking: RequestHandler = TryCatchHandler(async (req, res) => {
@@ -83,5 +95,6 @@ export const bookingController = {
   getAllBookings,
   getSingleBooking,
   updateBooking,
-  deleteBooking
+  deleteBooking,
+  getBookingByUserId
 }
