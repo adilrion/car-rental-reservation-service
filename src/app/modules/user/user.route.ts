@@ -3,7 +3,6 @@ import express from 'express'
 
 import { ERole } from '../../../enums/EnumUser'
 import AuthorizationPermission from '../../middleware/authorizationService'
-import userAuthorizationMiddleware from '../../middleware/userAuthorization'
 import { zodValidationHandler } from '../../middleware/zodValidationHandler'
 import { idRequestValidation } from '../../zodValidation/idRequestValidation'
 import { userController } from './user.controller'
@@ -34,7 +33,6 @@ route.get(
 // get single user routes
 route.get(
   '/:id',
-  userAuthorizationMiddleware(),
   zodValidationHandler(idRequestValidation),
   userController.getSingleUser,
 )
@@ -42,7 +40,6 @@ route.get(
 // update user routes
 route.patch(
   '/update-user/:id',
-  userAuthorizationMiddleware(),
   zodValidationHandler(idRequestValidation),
   zodValidationHandler(UserUpdateValidationSchema),
   userController.updateUser,

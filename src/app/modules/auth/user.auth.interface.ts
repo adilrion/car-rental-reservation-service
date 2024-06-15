@@ -11,20 +11,4 @@ export type ILoginResponse = {
 } & Partial<IUser>
 
 
-export type ILogoutResponse = {
-  accessToken: string
-  refreshToken?: string
-}
 
-export type IRefreshTokenResponse = {
-  accessToken: string
-  data: IUser
-}
-
-
-
-
-export type IChangePassword = {
-  oldPassword: string
-  newPassword: string
-}

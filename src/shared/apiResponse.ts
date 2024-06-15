@@ -6,7 +6,6 @@ export const ApiResponse = <T>(res: Response, data: ApiResponseType<T>) => {
     success: data.success,
     statusCode: data.statusCode,
     message: data?.message || null,
-    ...(data?.meta && { meta: data.meta }),
     ...(data?.data && { data: data.data }),
     ...(data?.token && { token: data.token }),
   })

@@ -9,8 +9,6 @@ export default {
   port: process.env.PORT || 5000,
   mongoURI: process.env.MONGODB_URI,
   bcryptSaltRound: process.env.BCRYPT_SALT_ROUND,
-  frontEndUrl: process.env.FRONT_END_URL,
-  adminUrl: process.env.ADMIN_URL,
   jwt: {
     secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN,
